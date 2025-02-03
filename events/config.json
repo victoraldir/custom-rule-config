@@ -1,0 +1,104 @@
+{
+    "accountId": "123456789010",
+    "configRuleArn": "arn:aws:config:eu-central-1:123456789010:config-rule/config-rule-xnshmw" ,
+    "configRuleId": "config-rule-xnshmw", 
+    "configRuleName": "RequiredTagsCustomConfigRule", 
+    "eventLeftScope": false, 
+    "executionRoleArn": "arn:aws:iam::123456789010:role/aws-service-role/config.amazonaws.com/AWSServiceRoleForConfig",
+    "invokingEvent": {
+        "configurationItemDiff":null,
+        "configurationItem":{
+           "relatedEvents":[
+              
+           ],
+           "relationships":[
+              
+           ],
+           "configuration":{
+              "name":"testbucketbla123",
+              "owner":{
+                 "displayName":null,
+                 "id":"c15b1edf57016ab181a87188cfd5b572e761d5c01386c6a7bb0fb2fb230f3bef"
+              },
+              "creationDate":"2025-02-03T21:31:19.000Z",
+              "region":"eu-central-1"
+           },
+           "supplementaryConfiguration":{
+              "AccessControlList":"{\"grantSet\":null,\"grantList\":[{\"grantee\":{\"id\":\"c15b1edf57016ab181a87188cfd5b572e761d5c01386c6a7bb0fb2fb230f3bef\",\"displayName\":null},\"permission\":\"FullControl\"}],\"owner\":{\"displayName\":null,\"id\":\"c15b1edf57016ab181a87188cfd5b572e761d5c01386c6a7bb0fb2fb230f3bef\"},\"isRequesterCharged\":false}",
+              "BucketAccelerateConfiguration":{
+                 "status":null,
+                 "isRequesterCharged":false
+              },
+              "BucketLoggingConfiguration":{
+                 "destinationBucketName":null,
+                 "logFilePrefix":null,
+                 "targetObjectKeyFormat":null
+              },
+              "BucketNotificationConfiguration":{
+                 "configurations":{
+                    
+                 },
+                 "eventBridgeConfiguration":null
+              },
+              "BucketPolicy":{
+                 "policyText":null
+              },
+              "BucketTaggingConfiguration":{
+                 "tagSets":[
+                    {
+                       "tags":{
+                          "sampe":"test"
+                       }
+                    }
+                 ]
+              },
+              "BucketVersioningConfiguration":{
+                 "status":"Off",
+                 "isMfaDeleteEnabled":null
+              },
+              "IsRequesterPaysEnabled":false,
+              "PublicAccessBlockConfiguration":{
+                 "blockPublicAcls":true,
+                 "ignorePublicAcls":true,
+                 "blockPublicPolicy":true,
+                 "restrictPublicBuckets":true
+              },
+              "ServerSideEncryptionConfiguration":{
+                 "rules":[
+                    {
+                       "applyServerSideEncryptionByDefault":{
+                          "sseAlgorithm":"AES256",
+                          "kmsMasterKeyID":null
+                       },
+                       "bucketKeyEnabled":true
+                    }
+                 ]
+              }
+           },
+           "tags":{
+              "sampe":"test"
+           },
+           "configurationItemVersion":"1.3",
+           "configurationItemCaptureTime":"2025-02-03T21:48:35.817Z",
+           "configurationStateId":1738619315817,
+           "awsAccountId":"123456789010",
+           "configurationItemStatus":"OK",
+           "resourceType":"AWS::S3::Bucket",
+           "resourceId":"testbucketbla123",
+           "resourceName":"testbucketbla123",
+           "ARN":"arn:aws:s3:::testbucketbla123",
+           "awsRegion":"eu-central-1",
+           "availabilityZone":"Regional",
+           "configurationStateMd5Hash":"",
+           "resourceCreationTime":"2025-02-03T21:31:19.000Z",
+           "configurationItemDeliveryTime":null,
+           "recordingFrequency":null
+        },
+        "notificationCreationTime":"2025-02-03T22:27:25.600Z",
+        "messageType":"ConfigurationItemChangeNotification",
+        "recordVersion":"1.3"
+     },
+    "resultToken": "eyJlbmNyeXB0ZWREYXRhIjpbNDEsLTM1LC0xMTAsODcsLTg1LC05MywtNzEsLTExMyw4OSwtNTUsODEsLTgwLDM3LC0zOCwtMTAxLDExMSw4MCwtMTA0LC0yOCwtNzgsOTIsNzgsNzIsMTA5LDQ3LDQ4LDMzLDg0LC01NSwtMTI4LDQxLDExOSwtNywyLC00LDM4LDc2LDIzLC02MCwyMCwtNTUsLTQ1LDAsMTIsNDYsLTEyMCw5NCwtMTExLDEwMiw1NiwxMDEsOCwtODIsLTMyLC01Miw2MCwxM=",
+    "ruleParameters": "{\"tagKey\":\"sampe\",\"tagValue\":\"test\"}",
+    "version": "1.0"
+} 
