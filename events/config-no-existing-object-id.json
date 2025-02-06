@@ -1,0 +1,12 @@
+{
+    "accountId": "123456789010",
+    "configRuleArn": "arn:aws:config:eu-central-1:123456789010:config-rule/config-rule-xnshmw" ,
+    "configRuleId": "config-rule-xnshmw", 
+    "configRuleName": "RequiredTagsCustomConfigRule", 
+    "eventLeftScope": false, 
+    "executionRoleArn": "arn:aws:iam::123456789010:role/aws-service-role/config.amazonaws.com/AWSServiceRoleForConfig",
+    "invokingEvent": "{\"configurationItem\":{\"configurationItemCaptureTime\":\"2016-02-17T01:36:34.043Z\",\"awsAccountId\":\"123456789012\",\"configurationItemStatus\":\"OK\",\"resourceId\":\"i-00000000\",\"ARN\":\"arn:aws:s3:::aws-sam-cli-managed-default-samclisourcebucket-3hm5swd5rlbc\",\"awsRegion\":\"us-east-2\",\"availabilityZone\":\"us-east-2a\",\"resourceType\":\"AWS::EC2::Instance\",\"tags\":{\"ObjectId\":\"SC-ERR\"},\"relationships\":[{\"resourceId\":\"eipalloc-00000000\",\"resourceType\":\"AWS::EC2::EIP\",\"name\":\"Is attached to ElasticIp\"}],\"configuration\":{\"foo\":\"bar\"}},\"messageType\":\"ConfigurationItemChangeNotification\"}",
+    "resultToken": "eyJlbmNyeXB0ZWREYXRhIjpbNDEsLTM1LC0xMTAsODcsLTg1LC05MywtNzEsLTExMyw4OSwtNTUsODEsLTgwLDM3LC0zOCwtMTAxLDExMSw4MCwtMTA0LC0yOCwtNzgsOTIsNzgsNzIsMTA5LDQ3LDQ4LDMzLDg0LC01NSwtMTI4LDQxLDExOSwtNywyLC00LDM4LDc2LDIzLC02MCwyMCwtNTUsLTQ1LDAsMTIsNDYsLTEyMCw5NCwtMTExLDEwMiw1NiwxMDEsOCwtODIsLTMyLC01Miw2MCwxM=",
+    "ruleParameters": "{\"tagKey\":\"sampe\",\"tagValue\":\"test\"}",
+    "version": "1.0"
+} 

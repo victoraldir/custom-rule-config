@@ -1,6 +1,11 @@
 package main
 
-import "time"
+import (
+	"time"
+
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/service/dynamodb"
+)
 
 type InvokingEvent struct {
 	ConfigurationItemDiff    interface{}       `json:"configurationItemDiff"`
@@ -90,7 +95,9 @@ type TagSet struct {
 }
 
 type Tags struct {
-	Sampe string `json:"sampe"`
+	Environment string `json:"Environment"`
+	Department  string `json:"Department"`
+	ObjectId    string `json:"ObjectId"`
 }
 
 type BucketVersioningConfiguration struct {
@@ -117,4 +124,42 @@ type Rule struct {
 type ApplyServerSideEncryptionByDefault struct {
 	SseAlgorithm   string      `json:"sseAlgorithm"`
 	KmsMasterKeyID interface{} `json:"kmsMasterKeyID"`
+}
+
+type CatalogObject struct {
+	ObjectId string            `json:"object_id"`
+	Tags     map[string]string `json:"tags"`
+}
+
+// ToItem converts CatalogObject to a DynamoDB item
+func (c CatalogObject) ToItem() map[string]*dynamodb.AttributeValue {
+	item := make(map[string]*dynamodb.AttributeValue)
+	item["ObjectId"] = &dynamodb.AttributeValue{S: aws.String(c.ObjectId)}
+
+	tags := make(map[string]*dynamodb.AttributeValue)
+	for key, value := range c.Tags {
+		tags[key] = &dynamodb.AttributeValue{S: aws.String(value)}
+	}
+	item["Tags"] = &dynamodb.AttributeValue{M: tags}
+
+	return item
+}
+
+// ToTags converts CatalogObject tags to a map of strings
+func (c CatalogObject) ToTags() map[string]*string {
+	tags := make(map[string]*string)
+	for key, value := range c.Tags {
+		tags[key] = aws.String(value)
+	}
+
+	return tags
+}
+
+// IsCompliant checks if the required tags are present
+func (t *Tags) IsCompliant() bool {
+	return t.Environment != "" && t.Department != "" && t.ObjectId != ""
+}
+
+func (o CatalogObject) IsCompliant(tags Tags) bool {
+	return tags.Environment == o.Tags["Environment"] && tags.Department == o.Tags["Department"] && tags.ObjectId == o.Tags["ObjectId"]
 }

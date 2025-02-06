@@ -5,18 +5,27 @@ Description: >
 
   Sample SAM for AWS Config custom rule. This template creates a custom rule that checks whether the required tags are present on the resource.
 
-# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Parameters:
+  Region:
+    Type: String
+    Default: "eu-central-1"
+    Description: AWS Region where the resources will be deployed
+
+  TagsTableName:
+    Type: String
+    Default: TagsTable
+    Description: DynamoDB table name for storing tags
+
 Globals:
   Function:
     Timeout: 5
     MemorySize: 128
-
-    # You can add LoggingConfig parameters such as the Logformat, Log Group, and SystemLogLevel or ApplicationLogLevel. Learn more here https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-resource-function.html#sam-function-loggingconfig.
     LoggingConfig:
       LogFormat: JSON
+
 Resources:
   RequiredTagsLambda:
-    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Type: AWS::Serverless::Function
     Metadata:
       BuildMethod: go1.x
     Properties:
@@ -24,11 +33,17 @@ Resources:
       Handler: bootstrap
       Runtime: provided.al2023
       Architectures:
-      - x86_64
-  
+        - x86_64
+      Policies:
+        - ResourceGroupsandTagEditorFullAccess
+        - AWSLambdaBasicExecutionRole
+        - AWSConfigRulesExecutionRole
+        - DynamoDBCrudPolicy:
+            TableName: !Ref TagsTableName
+
   AllowConfigInvokeLambda:
     Type: AWS::Lambda::Permission
-    Properties:
+    Properties: 
       Action: lambda:InvokeFunction
       FunctionName: !GetAtt RequiredTagsLambda.Arn
       Principal: config.amazonaws.com
@@ -36,7 +51,7 @@ Resources:
   ConfigurationRecorder:
     Type: AWS::Config::ConfigurationRecorder
     Properties:
-      RoleARN: arn:aws:iam::${AWS::AccountId}:role/aws-service-role/config.amazonaws.com/AWSServiceRoleForConfig
+      RoleARN: arn:aws:iam::300336075695:role/aws-service-role/config.amazonaws.com/AWSServiceRoleForConfig
       RecordingGroup:
         AllSupported: true
         IncludeGlobalResourceTypes: true
@@ -46,9 +61,9 @@ Resources:
     Properties:
       ConfigSnapshotDeliveryProperties:
         DeliveryFrequency: TwentyFour_Hours
-      S3BucketName: !Ref ConfigBucket
+      S3BucketName: !Sub config-bucket-${AWS::AccountId}
       SnsTopicARN: !Ref ConfigTopic
-  
+
   RequiredTagsCustomConfigRule:
     Type: AWS::Config::ConfigRule
     Properties:
@@ -56,15 +71,29 @@ Resources:
       Description: Checks whether the required tags are present on the resource
       EvaluationModes:
         - Mode: DETECTIVE
+      MaximumExecutionFrequency: One_Hour
       Scope:
-        ComplianceResourceTypes:
-          - AWS::AllSupported
+        TagKey: ObjectId
       Source:
         Owner: CUSTOM_LAMBDA
         SourceIdentifier: !GetAtt RequiredTagsLambda.Arn
         SourceDetails:
           - EventSource: aws.config
             MessageType: ConfigurationItemChangeNotification
+
+  TagsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Ref TagsTableName
+      AttributeDefinitions:
+        - AttributeName: ObjectId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: ObjectId
+          KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
 
   ConfigTopic:
     Type: AWS::SNS::Topic
@@ -75,7 +104,7 @@ Resources:
   ConfigBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: !Sub 'config-bucket-${AWS::AccountId}'
+      BucketName: !Sub config-bucket-${AWS::AccountId}
       AccessControl: Private
       BucketEncryption:
         ServerSideEncryptionConfiguration:
@@ -110,17 +139,17 @@ Resources:
   ApplicationResourceGroup:
     Type: AWS::ResourceGroups::Group
     Properties:
-      Name:
-        Fn::Sub: ApplicationInsights-SAM-${AWS::StackName}
+      Name: !Sub ApplicationInsights-SAM-${AWS::StackName}
       ResourceQuery:
         Type: CLOUDFORMATION_STACK_1_0
+
   ApplicationInsightsMonitoring:
     Type: AWS::ApplicationInsights::Application
     Properties:
-      ResourceGroupName:
-        Ref: ApplicationResourceGroup
-      AutoConfigurationEnabled: 'true'
+      ResourceGroupName: !Ref ApplicationResourceGroup
+      AutoConfigurationEnabled: true
+
 Outputs:
-  RequiredTagsLambda:
+  RequiredTagsLambdaArn:
     Description: "RequiredTagsLambda ARN"
     Value: !GetAtt RequiredTagsLambda.Arn
